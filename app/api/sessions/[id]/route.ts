@@ -1,53 +1,16 @@
 import { NextResponse } from "next/server";
-import { prisma } from "../../../lib/db/client";
-import { mockSessions } from "../../../lib/data/mockData";
+import { prisma } from "../../../../lib/db/client";
+import { mockSessions } from "../../../../lib/data/mockData";
 
 const FALLBACK_USER_ID = "user-1";
 
-export async function GET() {
+export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   try {
     if (!process.env.DATABASE_URL) {
-      return NextResponse.json(mockSessions);
+      return NextResponse.json(mockSessions[0] ?? { id: params.id });
     }
-    const sessions = await prisma.session.findMany({
-      orderBy: { date: "desc" },
-      include: { sets: true }
-    });
-    if (!sessions.length) return NextResponse.json(mockSessions);
-    return NextResponse.json(
-      sessions.map((s: typeof sessions[number]) => ({
-        id: s.id,
-        date: s.date.toISOString().slice(0, 10),
-        objective: s.objective ?? undefined,
-        perceivedEffort: s.perceivedEffort ?? undefined,
-        moodBefore: s.moodBefore ?? undefined,
-        moodAfter: s.moodAfter ?? undefined,
-        painFlag: s.painFlag ?? false,
-        userNote: s.userNote ?? undefined,
-        sets: s.sets.map((set: typeof s.sets[number]) => ({
-          kind: set.kind,
-          reps: set.reps ?? undefined,
-          distanceM: set.distanceM ?? undefined,
-          restDistanceM: set.restDistanceM ?? undefined,
-          durationSec: set.durationSec ?? undefined,
-          targetPaceSec: set.targetPaceSecPerKm ?? undefined,
-          description: set.glowScenarioJson ?? undefined
-        }))
-      }))
-    );
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(mockSessions, { status: 200 });
-  }
-}
-
-export async function POST(req: Request) {
-  try {
-    if (!process.env.DATABASE_URL) {
-      return NextResponse.json(mockSessions[0] ?? {});
-    }
-    const body = (await req.json()) as {
-      id: string;
+    const id = params.id;
+    const body = (await req.json()) as Partial<{
       date: string;
       objective?: string;
       perceivedEffort?: string;
@@ -64,13 +27,24 @@ export async function POST(req: Request) {
         targetPaceSec?: number;
         description?: string;
       }>;
-    };
+    }>;
 
-    const created = await prisma.session.create({
-      data: {
-        id: body.id,
+    const saved = await prisma.session.upsert({
+      where: { id },
+      update: {
         userId: FALLBACK_USER_ID,
-        date: new Date(body.date),
+        date: body.date ? new Date(body.date) : undefined,
+        objective: body.objective ?? undefined,
+        perceivedEffort: body.perceivedEffort ?? undefined,
+        moodBefore: body.moodBefore ?? undefined,
+        moodAfter: body.moodAfter ?? undefined,
+        painFlag: body.painFlag ?? undefined,
+        userNote: body.userNote ?? undefined
+      },
+      create: {
+        id,
+        userId: FALLBACK_USER_ID,
+        date: new Date(body.date ?? new Date()),
         objective: body.objective ?? null,
         perceivedEffort: body.perceivedEffort ?? null,
         moodBefore: body.moodBefore ?? null,
@@ -80,11 +54,12 @@ export async function POST(req: Request) {
       }
     });
 
-    if (body.sets?.length) {
+    if (body.sets) {
+      await prisma.trainingSet.deleteMany({ where: { sessionId: saved.id } });
       for (const set of body.sets) {
         await prisma.trainingSet.create({
           data: {
-            sessionId: created.id,
+            sessionId: saved.id,
             kind: set.kind,
             reps: set.reps ?? null,
             distanceM: set.distanceM ?? null,
@@ -98,12 +73,12 @@ export async function POST(req: Request) {
     }
 
     const sessionWithSets = await prisma.session.findUnique({
-      where: { id: created.id },
+      where: { id: saved.id },
       include: { sets: true }
     });
 
     if (!sessionWithSets) {
-      return NextResponse.json({ error: "not found after create" }, { status: 500 });
+      return NextResponse.json({ error: "not found after upsert" }, { status: 500 });
     }
 
     return NextResponse.json({
@@ -127,6 +102,6 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error(error);
-    return NextResponse.json({ error: "failed to create session" }, { status: 500 });
+    return NextResponse.json({ error: "failed to save session" }, { status: 500 });
   }
 }
