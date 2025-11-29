@@ -39,3 +39,7 @@
   - AIメニュー/リフレクトの開発ノートを `.stub-notice` に統一。  
   - リフレクトのレスポンス表示をフラットな枠に整形。  
   - BLE Connectボタンの接続後スタイルを弱めた色味＋ラベル更新にして状態を明示。
+- 2025-11-29: DB設計開始  
+  - `prisma/schema.prisma` に User/Race/Session/TrainingSet/Feedback/Chat/Summary を定義。  
+  - PostgreSQL + Prismaを前提。既存要件（request_glow_web_mind_app.md）の概念モデルを忠実に踏襲。  
+  - glowScenarioJson は TrainingSet に保持、tagsJson / topicsJson はJSON文字列で保存。

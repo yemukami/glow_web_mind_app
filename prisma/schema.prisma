@@ -1,0 +1,124 @@
+// Prisma schema draft for Glow Web Mind App
+// Target: PostgreSQL
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                 String    @id @default(cuid())
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  nickname           String
+  ageGroup           String          // "junior_high" | "high" | "univ" | "adult"
+  mainEvents         String          // e.g., "1500m,5000m" (CSV or JSON string)
+  hasCoach           Boolean   @default(false)
+  trainingStyle      String          // "club" | "solo" | "other"
+  weeklyTargetMinutes Int?
+
+  sessions           Session[]
+  races              Race[]
+  summaries          Summary[]
+}
+
+model Race {
+  id         String   @id @default(cuid())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     String
+
+  date       DateTime
+  name       String
+  type       String   // "race" | "record_trial" | "test_run" | "other"
+  importance String   // "A" | "B" | "C"
+  event      String?
+  memo       String?
+
+  createdAt  DateTime @default(now())
+
+  // Optional external linkage
+  externalSource  String?  // e.g., "google_calendar"
+  externalEventId String?
+}
+
+model Session {
+  id          String      @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  date        DateTime
+  facilityId  String?
+  objective   String?     // "speed" | "endurance" | "recovery" etc.
+  perceivedEffort String? // "easy" | "moderate" | "too_hard"
+  moodBefore  String?     // "good" | "normal" | "bad"
+  moodAfter   String?
+  painFlag    Boolean     @default(false)
+  userNote    String?
+
+  sets        TrainingSet[]
+  feedbacks   Feedback[]
+  chats       Chat[]
+
+  createdAt   DateTime @default(now())
+}
+
+model TrainingSet {
+  id          String   @id @default(cuid())
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId   String
+
+  kind        String   // "interval" | "tempo" | "jog" etc.
+  reps        Int?
+  distanceM   Int?
+  restDistanceM Int?
+  durationSec Int?
+  targetPaceSecPerKm Int?
+
+  // glow-c に送信したシナリオ（既存形式をJSON文字列で保持）
+  glowScenarioJson String?
+
+  createdAt   DateTime @default(now())
+}
+
+model Feedback {
+  id          String   @id @default(cuid())
+  session     Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  sessionId   String
+
+  tagsJson    String   // JSON array like ["仕事疲労","やる気低め"]
+  createdAt   DateTime @default(now())
+}
+
+model Chat {
+  id          String   @id @default(cuid())
+  session     Session? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  sessionId   String?
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  role        String   // "user" | "assistant"
+  text        String
+  turnIndex   Int
+  createdAt   DateTime @default(now())
+}
+
+model Summary {
+  id          String   @id @default(cuid())
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  type        String   // "weekly" | "overall"
+  periodStart DateTime?
+  periodEnd   DateTime?
+
+  text        String   // 最近の傾向テキスト
+  topicsJson  String?  // [{key, score_recent, trend}, ...]
+
+  createdAt   DateTime @default(now())
+}
