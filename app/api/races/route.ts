@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { prisma } from "../../../lib/db/client";
 import { mockRaces } from "../../../lib/data/mockData";
 
+const FALLBACK_USER_ID = "user-1";
+
 export async function GET() {
   try {
     if (!process.env.DATABASE_URL) {

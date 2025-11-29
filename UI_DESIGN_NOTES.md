@@ -48,3 +48,7 @@
   - `prisma/seed.ts` でモックデータをDBにupsertできるように準備（USE_DBで切り替え前提）。  
   - `lib/db/client.ts` を追加し、PrismaClientをsingleton管理。  
   - `lib/data/api.ts` を `USE_DB=true` 時にPrisma経由で取得し、未接続時はモックを返すフェイルセーフに変更。
+- 2025-11-29: Auto-save (MVP)  
+  - Profile/Races/Sessions のUIをクライアント化し、自動保存（デバウンス + 楽観的更新）を追加。  
+  - ボタンレス保存前提。エラー時は軽いメッセージのみ。  
+  - ミューテーションAPI: Profile PATCH, Races POST/PATCH, Sessions POST/PATCH（単一ユーザーIDで運用）。
