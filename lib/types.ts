@@ -27,6 +27,7 @@ export interface TrainingSet {
   reps?: number;
   distanceM?: number;
   restDistanceM?: number;
+  durationSec?: number;
   targetPaceSec?: number;
   description?: string;
 }

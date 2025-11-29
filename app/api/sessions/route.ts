@@ -10,7 +10,7 @@ export async function GET() {
     });
     if (!sessions.length) return NextResponse.json(mockSessions);
     return NextResponse.json(
-      sessions.map((s) => ({
+      sessions.map((s: typeof sessions[number]) => ({
         id: s.id,
         date: s.date.toISOString().slice(0, 10),
         objective: s.objective ?? undefined,
@@ -19,7 +19,7 @@ export async function GET() {
         moodAfter: s.moodAfter ?? undefined,
         painFlag: s.painFlag ?? false,
         userNote: s.userNote ?? undefined,
-        sets: s.sets.map((set) => ({
+        sets: s.sets.map((set: typeof s.sets[number]) => ({
           kind: set.kind,
           reps: set.reps ?? undefined,
           distanceM: set.distanceM ?? undefined,

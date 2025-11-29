@@ -7,7 +7,7 @@ export async function GET() {
     const races = await prisma.race.findMany({ orderBy: { date: "asc" } });
     if (!races.length) return NextResponse.json(mockRaces);
     return NextResponse.json(
-      races.map((r) => ({
+      races.map((r: typeof races[number]) => ({
         id: r.id,
         date: r.date.toISOString().slice(0, 10),
         name: r.name,

@@ -2,7 +2,6 @@ import {
   type AiMenuSuggestion,
   type AiReflectMessage,
   type Race,
-  type Session,
   type UserProfile
 } from "../types";
 import {
@@ -20,17 +19,17 @@ import { type Session } from "../types";
  */
 
 export async function getUserProfile(): Promise<UserProfile> {
-  const res = await safeFetch("/api/profile");
+  const res = await safeFetch<UserProfile>("/api/profile");
   return res ?? mockProfile;
 }
 
 export async function getRaces(): Promise<Race[]> {
-  const res = await safeFetch("/api/races");
+  const res = await safeFetch<Race[]>("/api/races");
   return res ?? mockRaces;
 }
 
 export async function getSessions(): Promise<Session[]> {
-  const res = await safeFetch("/api/sessions");
+  const res = await safeFetch<Session[]>("/api/sessions");
   return res ?? mockSessions;
 }
 

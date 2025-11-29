@@ -12,7 +12,7 @@ export async function GET() {
       id: u.id,
       nickname: u.nickname,
       ageGroup: u.ageGroup,
-      mainEvents: u.mainEvents.split(",").map((s) => s.trim()),
+      mainEvents: u.mainEvents.split(",").map((s: string) => s.trim()),
       trainingStyle: u.trainingStyle,
       hasCoach: u.hasCoach,
       weeklyTargetMinutes: u.weeklyTargetMinutes ?? undefined

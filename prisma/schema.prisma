@@ -25,6 +25,7 @@ model User {
   sessions           Session[]
   races              Race[]
   summaries          Summary[]
+  chats              Chat[]
 }
 
 model Race {
