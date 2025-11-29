@@ -19,7 +19,7 @@ npm run dev
 ```
 
 ## Deploy
-- Connect repo to Vercel (branch: `main`). Next.js defaults should work.
+- Connect repo to Vercel (branch: `main`). `vercel.json` pins build to `npm run build` with output `.next`.
 
 ## Notes
 - glow-r list取得は別アプリ側でDB経由実装予定のため、libs/ble の `fetchGlowRDevicesFromDb` はスタブ。
