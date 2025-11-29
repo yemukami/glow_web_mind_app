@@ -57,10 +57,9 @@ export default function BleSimulator({ mockDevices }: SimulatorProps) {
           <button
             onClick={handleConnect}
             disabled={connected}
-            className={connected ? "cta-button" : "cta-button"} // Same style for now, could change
-            style={{ opacity: connected ? 0.5 : 1, cursor: connected ? "default" : "pointer" }}
+            className={`cta-button ${connected ? "cta-button--disabled" : ""}`}
           >
-            {connected ? "Connected" : "Connect via Web Bluetooth"}
+            {connected ? "Connected (Simulated)" : "Connect via Web Bluetooth"}
           </button>
         </div>
 

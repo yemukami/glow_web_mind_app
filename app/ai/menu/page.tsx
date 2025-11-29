@@ -7,7 +7,7 @@ export default async function AiMenuPage() {
     <div className="panel-grid">
       <article className="panel">
         <h2>今日のコンディション</h2>
-        <p className="muted">AI メニュー提案へ送る入力（スタブ）。送信先 API は後で接続。</p>
+        <div className="stub-notice">AI メニュー提案へ送る入力（スタブ）。送信先 API は後で接続。</div>
         <div className="field">
           <label htmlFor="cond-mood">気分</label>
           <select id="cond-mood" defaultValue="">
@@ -39,7 +39,7 @@ export default async function AiMenuPage() {
 
       <article className="panel">
         <h2>前回候補セッション</h2>
-        <p className="muted">AIへのコンテキスト例（ダミー）。</p>
+        <div className="stub-notice">AIへのコンテキスト例（ダミー）。</div>
         <ul className="list">
           <li>日付: {previousSession?.date ?? "-"}</li>
           <li>目的: {previousSession?.objective ?? "-"}</li>
@@ -54,7 +54,7 @@ export default async function AiMenuPage() {
 
       <article className="panel">
         <h2>AIメニュー案（サンプル表示）</h2>
-        <p className="muted">APIレスポンス例を先にレイアウト化。実データで置き換えます。</p>
+        <div className="stub-notice">APIレスポンス例を先にレイアウト化。実データで置き換えます。</div>
         <div className="pill">logical_menu</div>
         <p className="muted">{suggestion.messageToUser}</p>
         <ul className="list">

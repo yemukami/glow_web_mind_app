@@ -6,7 +6,7 @@ export default async function AiReflectPage() {
     <div className="panel-grid">
       <article className="panel">
         <h2>練習後入力</h2>
-        <p className="muted">AIねぎらい（light/deep）に渡す入力のスタブ。</p>
+        <div className="stub-notice">AIねぎらい（light/deep）に渡す入力のスタブ。</div>
         <div className="field">
           <label htmlFor="reflect-effort">きつさ</label>
           <select id="reflect-effort" defaultValue="">
@@ -48,8 +48,15 @@ export default async function AiReflectPage() {
 
       <article className="panel">
         <h2>AIメッセージ（サンプル）</h2>
-        <p className="muted">レスポンスのレイアウト例。</p>
-        <div className="panel" style={{ background: "#f8fafc" }}>
+        <div className="stub-notice">レスポンスのレイアウト例。API接続後に置き換え。</div>
+        <div
+          style={{
+            background: "#f8fafc",
+            border: "1px solid #e2e8f0",
+            borderRadius: "10px",
+            padding: "10px 12px"
+          }}
+        >
           {message.messageToUser.map((line, idx) => (
             <p key={idx} className={idx === message.messageToUser.length - 1 ? "muted" : ""}>
               {line}
