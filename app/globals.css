@@ -171,3 +171,27 @@ a {
   font-size: 0.85rem;
   color: #64748b;
 }
+
+.cta-button {
+  display: inline-block;
+  background: #0f172a;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 999px;
+  font-weight: 600;
+  transition: background 150ms ease;
+}
+
+.cta-button:hover {
+  background: #334155;
+}
+
+.stub-notice {
+  background: #f1f5f9;
+  border-left: 3px solid #94a3b8;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 0.85rem;
+  color: #475569;
+  border-radius: 0 4px 4px 0;
+}

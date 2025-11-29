@@ -23,7 +23,7 @@ export default async function SessionsPage() {
     <div className="panel-grid">
       <article className="panel">
         <h2>練習前（コンディション入力）</h2>
-        <p className="muted">AIメニュー提案に渡す前の入力欄。送信先APIを後で接続します。</p>
+        <div className="stub-notice">AIメニュー提案に渡す前の入力欄。送信先APIを後で接続します。</div>
         <div className="field">
           <label htmlFor="mood">今日の気分</label>
           <select id="mood" defaultValue="">
@@ -62,7 +62,7 @@ export default async function SessionsPage() {
 
       <article className="panel">
         <h2>メニュー案（サンプル）</h2>
-        <p className="muted">AI出力例をダミー表示。TrainingSet 変換→ glow-c 送信は別ページまたはこの後段で実装。</p>
+        <div className="stub-notice">AI出力例をダミー表示。TrainingSet 変換→ glow-c 送信は別ページまたはこの後段で実装。</div>
         {renderSets(sessions[0]?.sets ?? [])}
         <p className="subtle">
           logical_menu JSON を生成 → TrainingSet → glowScenarioJson 変換 → BLE送信（後で接続）。
@@ -71,7 +71,7 @@ export default async function SessionsPage() {
 
       <article className="panel">
         <h2>練習後（フィードバック）</h2>
-        <p className="muted">ねぎらいメッセージ用の入力欄。AI reflect に転送予定。</p>
+        <div className="stub-notice">ねぎらいメッセージ用の入力欄。AI reflect に転送予定。</div>
         <div className="field">
           <label htmlFor="effort">きつさ</label>
           <select id="effort" defaultValue="">
