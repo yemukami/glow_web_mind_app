@@ -4,6 +4,9 @@ import { mockSessions } from "../../../lib/data/mockData";
 
 export async function GET() {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(mockSessions);
+    }
     const sessions = await prisma.session.findMany({
       orderBy: { date: "desc" },
       include: { sets: true }

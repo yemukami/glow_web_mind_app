@@ -4,6 +4,9 @@ import { mockRaces } from "../../../lib/data/mockData";
 
 export async function GET() {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(mockRaces);
+    }
     const races = await prisma.race.findMany({ orderBy: { date: "asc" } });
     if (!races.length) return NextResponse.json(mockRaces);
     return NextResponse.json(

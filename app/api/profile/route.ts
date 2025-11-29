@@ -4,6 +4,9 @@ import { mockProfile } from "../../../lib/data/mockData";
 
 export async function GET() {
   try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(mockProfile);
+    }
     const u = await prisma.user.findFirst();
     if (!u) {
       return NextResponse.json(mockProfile);
