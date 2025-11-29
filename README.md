@@ -4,8 +4,8 @@ Glow-Rabbit runner-support web app (AI menu + glow-c send + post-run chat). See 
 
 ## Status
 - Git: initialized on `main`, remote `yemukami/glow_web_mind_app`.
-- Scaffold: Next.js + TypeScript (App Router), minimal landing page.
-- BLE: libs/ble is stubbed; port from `glow_web_app` next.
+- Scaffold: Next.js + TypeScript (App Router), landing + nav + screen stubs.
+- BLE: libs/ble is stubbed; port from `glow_web_app` next. glow-r list fetch is DB/other app.
 
 ## References
 - Requirements: `/Users/murakamikenji/Downloads/glowtestbase/request_glow_web_mind_app.md`
@@ -24,3 +24,4 @@ npm run dev
 ## Notes
 - glow-r list取得は別アプリ側でDB経由実装予定のため、libs/ble の `fetchGlowRDevicesFromDb` はスタブ。
 - Web Bluetooth: connect/disconnect must be user-gesture driven; send via queued write (highPriority for Start/Stop).
+- Pages: `/profile`, `/races`, `/sessions`, `/ai/menu`, `/ai/reflect`, `/ble`.
