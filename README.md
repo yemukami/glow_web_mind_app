@@ -1,17 +1,26 @@
 # glow-web-mind-app
 
-This repository will host the Glow-Rabbit mind/runner web app described in `request_glow_web_mind_app.md`.
+Glow-Rabbit runner-support web app (AI menu + glow-c send + post-run chat). See `request_glow_web_mind_app.md` for MVP scope.
 
 ## Status
-- Git repo initialized locally (branch: `main`).
-- App scaffold not created yet; will mirror the Web/Vercel setup used in existing Glow web work once requirements are finalized.
+- Git: initialized on `main`, remote `yemukami/glow_web_mind_app`.
+- Scaffold: Next.js + TypeScript (App Router), minimal landing page.
+- BLE: libs/ble is stubbed; port from `glow_web_app` next.
 
 ## References
 - Requirements: `/Users/murakamikenji/Downloads/glowtestbase/request_glow_web_mind_app.md`
-- Project guides: `.codex/docs/report_phase1.md`, `.codex/docs/agent_guide_web.md`
+- Guides: `.codex/docs/report_phase1.md`, `.codex/docs/agent_guide_web.md`
+- BLE source: `glow_web_app/ble_protocol.js`, `glow_web_app/app.js` (queue/commands)
 
-## Next steps
-1. Add GitHub remote and push `main`.
-2. Scaffold the web app (likely Next.js + TypeScript) in this directory.
-3. Hook Vercel to the GitHub repo for preview deployments.
-4. Port/compose features per the MVP spec, reusing patterns from `glow_web_app` where appropriate.
+## Run (after installing deps)
+```bash
+npm install
+npm run dev
+```
+
+## Deploy
+- Connect repo to Vercel (branch: `main`). Next.js defaults should work.
+
+## Notes
+- glow-r list取得は別アプリ側でDB経由実装予定のため、libs/ble の `fetchGlowRDevicesFromDb` はスタブ。
+- Web Bluetooth: connect/disconnect must be user-gesture driven; send via queued write (highPriority for Start/Stop).
