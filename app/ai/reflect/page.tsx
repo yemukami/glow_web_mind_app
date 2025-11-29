@@ -1,4 +1,7 @@
-export default function AiReflectPage() {
+import { getAiReflectMessage } from "../../../lib/data/api";
+
+export default async function AiReflectPage() {
+  const message = await getAiReflectMessage();
   return (
     <div className="panel-grid">
       <article className="panel">
@@ -47,9 +50,11 @@ export default function AiReflectPage() {
         <h2>AIメッセージ（サンプル）</h2>
         <p className="muted">レスポンスのレイアウト例。</p>
         <div className="panel" style={{ background: "#f8fafc" }}>
-          <p>寝不足のなかで6本やり切ったのは、かなり頑張ったと思うよ。</p>
-          <p>今日は「本数を落とさずに走り切れた」ことが一番の成果だね。</p>
-          <p className="muted">次は、テストの合間でいいので、もう少し体力を温存できる日を選べると楽になるはず。</p>
+          {message.messageToUser.map((line, idx) => (
+            <p key={idx} className={idx === message.messageToUser.length - 1 ? "muted" : ""}>
+              {line}
+            </p>
+          ))}
         </div>
         <p className="subtle">deepモードでは質問→回答を最大2〜3往復で表示予定。</p>
       </article>

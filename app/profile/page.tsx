@@ -1,4 +1,7 @@
-export default function ProfilePage() {
+import { getUserProfile } from "../../lib/data/api";
+
+export default async function ProfilePage() {
+  const profile = await getUserProfile();
   return (
     <div className="panel-grid">
       <article className="panel">
@@ -63,12 +66,12 @@ export default function ProfilePage() {
         <h2>プロフィール概要</h2>
         <p className="muted">サンプルの表示用データです。DB保存後に実値で置き換えます。</p>
         <ul className="list">
-          <li>ニックネーム: まだ未設定</li>
-          <li>年齢帯: 未設定</li>
-          <li>主な種目: 1500m / 5000m</li>
-          <li>練習スタイル: club</li>
-          <li>コーチ: いる/いない</li>
-          <li>週ターゲット: 240分</li>
+          <li>ニックネーム: {profile.nickname}</li>
+          <li>年齢帯: {profile.ageGroup}</li>
+          <li>主な種目: {profile.mainEvents.join(" / ")}</li>
+          <li>練習スタイル: {profile.trainingStyle}</li>
+          <li>コーチ: {profile.hasCoach ? "いる" : "いない"}</li>
+          <li>週ターゲット: {profile.weeklyTargetMinutes ?? "-"} 分</li>
         </ul>
         <p className="subtle">今後、まとめカードやAIコンテキスト表示を追加予定。</p>
       </article>

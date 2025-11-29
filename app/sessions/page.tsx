@@ -1,9 +1,24 @@
-const sampleSets = [
-  { kind: "interval", description: "400m×6本（94秒、レスト200mジョグ）" },
-  { kind: "tempo", description: "20分テンポ走（4:05/km）" }
-];
+import { getSessions } from "../../lib/data/api";
+import { type Session } from "../../lib/types";
 
-export default function SessionsPage() {
+function renderSets(sets: Session["sets"]) {
+  return (
+    <ul className="list">
+      {sets.map((set) => (
+        <li key={set.description ?? `${set.kind}-${set.distanceM ?? ""}-${set.reps ?? ""}`}>
+          <strong>{set.kind}</strong>{" "}
+          {set.description ??
+            `${set.reps ? `${set.reps}本 ` : ""}${set.distanceM ? `${set.distanceM}m` : ""} ${
+              set.targetPaceSec ? `(${set.targetPaceSec}s)` : ""
+            }`}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+export default async function SessionsPage() {
+  const sessions = await getSessions();
   return (
     <div className="panel-grid">
       <article className="panel">
@@ -48,13 +63,7 @@ export default function SessionsPage() {
       <article className="panel">
         <h2>メニュー案（サンプル）</h2>
         <p className="muted">AI出力例をダミー表示。TrainingSet 変換→ glow-c 送信は別ページまたはこの後段で実装。</p>
-        <ul className="list">
-          {sampleSets.map((set) => (
-            <li key={set.description}>
-              <strong>{set.kind}</strong> — {set.description}
-            </li>
-          ))}
-        </ul>
+        {renderSets(sessions[0]?.sets ?? [])}
         <p className="subtle">
           logical_menu JSON を生成 → TrainingSet → glowScenarioJson 変換 → BLE送信（後で接続）。
         </p>

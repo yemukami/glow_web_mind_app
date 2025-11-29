@@ -1,10 +1,8 @@
-const previousSession = {
-  date: "2025-03-10",
-  objective: "speed",
-  summary: "400m×8本（90秒/本、レスト200m） / perceived: moderate / コメント: 最後2本きつい"
-};
+import { getAiMenuSuggestion, getSessions } from "../../../lib/data/api";
 
-export default function AiMenuPage() {
+export default async function AiMenuPage() {
+  const [sessions, suggestion] = await Promise.all([getSessions(), getAiMenuSuggestion()]);
+  const previousSession = sessions[0];
   return (
     <div className="panel-grid">
       <article className="panel">
@@ -43,19 +41,32 @@ export default function AiMenuPage() {
         <h2>前回候補セッション</h2>
         <p className="muted">AIへのコンテキスト例（ダミー）。</p>
         <ul className="list">
-          <li>日付: {previousSession.date}</li>
-          <li>目的: {previousSession.objective}</li>
-          <li>内容: {previousSession.summary}</li>
+          <li>日付: {previousSession?.date ?? "-"}</li>
+          <li>目的: {previousSession?.objective ?? "-"}</li>
+          <li>
+            内容:{" "}
+            {previousSession?.sets
+              .map((set) => set.description ?? `${set.kind} ${set.distanceM ?? ""}m`)
+              .join(" / ") ?? "-"}
+          </li>
         </ul>
       </article>
 
       <article className="panel">
         <h2>AIメニュー案（サンプル表示）</h2>
         <p className="muted">APIレスポンス例を先にレイアウト化。実データで置き換えます。</p>
-        <div className="pill">大会まで10日 / 抑えめ / interval</div>
+        <div className="pill">logical_menu</div>
+        <p className="muted">{suggestion.messageToUser}</p>
         <ul className="list">
-          <li>400m×6本（94秒目安、レスト200mジョグ）</li>
-          <li>余裕があれば最後1〜2本だけ少し上げる</li>
+          {suggestion.logicalMenu.sets.map((set, idx) => (
+            <li key={set.description ?? `${set.kind}-${idx}`}>
+              <strong>{set.kind}</strong>{" "}
+              {set.description ??
+                `${set.reps ? `${set.reps}本` : ""} ${set.distanceM ? `${set.distanceM}m` : ""} ${
+                  set.targetPaceSec ? `(${set.targetPaceSec}s)` : ""
+                }`}
+            </li>
+          ))}
         </ul>
         <p className="subtle">logical_menu を TrainingSet に変換 → glowScenarioJson 生成へ渡す。</p>
       </article>

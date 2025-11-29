@@ -1,9 +1,8 @@
-const sampleRaces = [
-  { date: "2025-04-20", name: "県総体1500m", importance: "A", event: "1500m" },
-  { date: "2025-03-28", name: "記録会5000m", importance: "B", event: "5000m" }
-];
+import { getRaces } from "../../lib/data/api";
 
-export default function RacesPage() {
+export default async function RacesPage() {
+  const races = await getRaces();
+
   return (
     <div className="panel-grid">
       <article className="panel">
@@ -52,8 +51,8 @@ export default function RacesPage() {
         <h2>登録済み（サンプル）</h2>
         <p className="muted">API接続前のダミー表示です。</p>
         <ul className="list">
-          {sampleRaces.map((race) => (
-            <li key={race.date + race.name}>
+          {races.map((race) => (
+            <li key={race.id}>
               <strong>{race.name}</strong> / {race.date} / {race.event} / 重要度: {race.importance}
             </li>
           ))}
