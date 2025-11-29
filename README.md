@@ -26,3 +26,4 @@ npm run dev
 - Web Bluetooth: connect/disconnect must be user-gesture driven; send via queued write (highPriority for Start/Stop).
 - Pages: `/profile`, `/races`, `/sessions`, `/ai/menu`, `/ai/reflect`, `/ble`.
 - DB: Prisma + PostgreSQL 想定。`cp .env.example .env` して `DATABASE_URL` を設定してください。
+- API: `/api/profile`, `/api/races`, `/api/sessions` でPrisma経由GET。`safeFetch` で失敗時はモックにフォールバック。
