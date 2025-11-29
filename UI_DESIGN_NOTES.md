@@ -43,3 +43,8 @@
   - `prisma/schema.prisma` に User/Race/Session/TrainingSet/Feedback/Chat/Summary を定義。  
   - PostgreSQL + Prismaを前提。既存要件（request_glow_web_mind_app.md）の概念モデルを忠実に踏襲。  
   - glowScenarioJson は TrainingSet に保持、tagsJson / topicsJson はJSON文字列で保存。
+- 2025-11-29: DB接続準備  
+  - `.env.example` を追加（DATABASE_URLサンプル）。`.gitignore` に例外追加。  
+  - `prisma/seed.ts` でモックデータをDBにupsertできるように準備（USE_DBで切り替え前提）。  
+  - `lib/db/client.ts` を追加し、PrismaClientをsingleton管理。  
+  - `lib/data/api.ts` を `USE_DB=true` 時にPrisma経由で取得し、未接続時はモックを返すフェイルセーフに変更。
