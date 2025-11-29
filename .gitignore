@@ -12,5 +12,6 @@ pnpm-debug.log*
 # Env / editor
 .env
 .env.*
+!.env.example
 .DS_Store
 .vscode

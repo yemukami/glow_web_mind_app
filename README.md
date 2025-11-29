@@ -25,3 +25,4 @@ npm run dev
 - glow-r list取得は別アプリ側でDB経由実装予定のため、libs/ble の `fetchGlowRDevicesFromDb` はスタブ。
 - Web Bluetooth: connect/disconnect must be user-gesture driven; send via queued write (highPriority for Start/Stop).
 - Pages: `/profile`, `/races`, `/sessions`, `/ai/menu`, `/ai/reflect`, `/ble`.
+- DB: Prisma + PostgreSQL 想定。`cp .env.example .env` して `DATABASE_URL` を設定してください。
